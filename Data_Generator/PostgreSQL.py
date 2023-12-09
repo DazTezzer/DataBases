@@ -31,7 +31,7 @@ cursor.execute('''CREATE TABLE public.institute
     name character varying(256) COLLATE pg_catalog."default",
     CONSTRAINT institute_pkey PRIMARY KEY (id));''')
 
-institutes_array = ['Институт кибербезопасности и цифровых технологий','Институт искусственного интеллекта']
+institutes_array = ['ИКБиЦТ','ИИТ','ИИИ','ИПТиИП','ИРиИ']
 institute_data = []
 for i in range(len(institutes_array)):
     institute_data.append((institutes_array[i]))
@@ -53,7 +53,7 @@ cursor.execute('''CREATE TABLE public.kafedra
         ON UPDATE NO ACTION
         ON DELETE NO ACTION);''')
 
-cafedras_array = ['КБ-2','КБ-3','КБ-5']
+cafedras_array = ['КБ-1','КБ-2','КБ-3','КБ-4','КБ-5']
 
 kafedra_data = []
 get_array_institute_id = "SELECT array_agg(id) FROM public.institute"
@@ -263,7 +263,7 @@ cursor.execute(get_array_lecture_id)
 array_lecture_ids=cursor.fetchall()
 
 # 1 семестр 23 год
-def get_random_date_1_22():
+def get_random_date_1_23():
     start = DT.strptime('01.09.2023', '%d.%m.%Y')
     end = DT.strptime('29.12.2023', '%d.%m.%Y')
     delta = end - start
@@ -273,7 +273,7 @@ def get_random_date_1_22():
     random_date = str(random_date)
     return ' '.join(random_date.split(' ')[:-1])
 # 2 семестр 23 год
-def get_random_date_2_22():
+def get_random_date_2_23():
     start = DT.strptime('09.01.2023', '%d.%m.%Y')
     end = DT.strptime('31.05.2023', '%d.%m.%Y')
     delta = end - start
@@ -283,7 +283,7 @@ def get_random_date_2_22():
     random_date = str(random_date)
     return ' '.join(random_date.split(' ')[:-1])
 # 1 семестр 24 год
-def get_random_date_1_23():
+def get_random_date_1_24():
     start = DT.strptime('01.09.2024', '%d.%m.%Y')
     end = DT.strptime('29.12.2024', '%d.%m.%Y')
     delta = end - start
@@ -293,7 +293,7 @@ def get_random_date_1_23():
     random_date = str(random_date)
     return ' '.join(random_date.split(' ')[:-1])
 # 2 семестр 24 год
-def get_random_date_2_23():
+def get_random_date_2_24():
     start = DT.strptime('09.01.2024', '%d.%m.%Y')
     end = DT.strptime('31.05.2024', '%d.%m.%Y')
     delta = end - start
@@ -305,7 +305,7 @@ def get_random_date_2_23():
 
 for lec in range(len(array_lecture_ids[0][0])):
     week = random.randint(1,16)
-    date = random.choice( [get_random_date_1_22(),get_random_date_2_22(),get_random_date_1_23(),get_random_date_2_23()])
+    date = random.choice( [get_random_date_1_23(),get_random_date_2_23(),get_random_date_1_24(),get_random_date_2_24()])
     time = random.choice(['9:00','10:40','12:40','14:20','16:20','18:00'])
     teacher_fio = fake.name()
     id = random.randint(0,len(array_group_ids[0][0])-1)
@@ -354,7 +354,7 @@ for st in range(len(array_student_ids[0][0])):
         student_id = array_student_ids[0][0][st]
         visited = random.choice([True, False])
         timeTable_id = array_timeTable_ids[0][0][tt]
-        date_visit = random.choice( [get_random_date_1_22(),get_random_date_2_22(),get_random_date_1_23(),get_random_date_2_23()])
+        date_visit = random.choice( [get_random_date_1_23(),get_random_date_2_23(),get_random_date_1_24(),get_random_date_2_24()])
         visits_data.append((student_id,visited,timeTable_id,date_visit))
 
 visits_values = ", ".join(["%s"] * len(visits_data))

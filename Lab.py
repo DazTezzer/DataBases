@@ -47,7 +47,7 @@ redis = redis.Redis(
 student_limit = 10
 phrase = 'модели'
 begin_date = '2023-09-01'
-end_date = '2024-05-29'
+end_date = '2023-12-28'
 
 
 query_body = {
@@ -70,6 +70,7 @@ for lection_id in materials_with_phrase_ids:
     for student in graphDB_Driver.session(database="neo4j").run(
         "MATCH (l:Lecture{iid:$id})--(d:Disciplines)--(s:Specialnost)--(g:Group)--(st:Student) RETURN  st", id=str(lection_id)).data():
         students.append(student['st']['id_stud_code'])
+print(students)
 
 querry_pattern = '''SELECT (CAST(SUM(CASE WHEN visited THEN 1 ELSE 0 END) AS FLOAT) / COUNT(*)) AS percent, student_id
 FROM visits
@@ -82,7 +83,7 @@ LIMIT '%s'
 cursor.execute(querry_pattern % (','.join(map(str,students)), str(begin_date), str(end_date), str(student_limit)))
 result=cursor.fetchall()
 
-headers = ["№", "Студент", "Прогресс", "Период", "Фраза"]
+headers = ["№", "Студент", "Посещение", "Период", "Искомое слово"]
 table_data = []
 
 for i, item in enumerate(result, 1):
@@ -90,7 +91,6 @@ for i, item in enumerate(result, 1):
     student_name = redis.get(student_id).decode()
     progress = f"{int(item[0] * 100)}%"
     period = f"c {begin_date} по {end_date}"
-    phrase = item[0]
 
     table_data.append([i, student_name, progress, period, phrase])
 
