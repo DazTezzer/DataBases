@@ -1,0 +1,88 @@
+version: '3.8'
+
+
+services:
+  postgres:
+    
+    image: postgres
+    container_name: postgres-server
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=12345
+    ports:
+      - '5433:5432'
+    volumes: 
+      - ./postgres/data:/var/lib/postgresql/data
+
+
+  mongo:
+    image: mongo
+    container_name: mongo-server
+    restart: always
+    volumes:
+      - ./mongo/data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: 12345
+    ports:
+      - 27017:27017
+
+  mongo-express:
+    image: mongo-express
+    container_name: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: 12345
+      ME_CONFIG_MONGODB_URL: mongodb://admin:12345@mongo:27017/
+
+
+  neo4j:
+    image: neo4j:5.12.0-enterprise
+    hostname: neo4j
+    container_name: neo4j-server
+    restart: always
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    volumes:
+      - ./neo4j/plugins:/plugins
+      - ./neo4j/data:/var/lib/neo4j/data
+    environment:
+      NEO4J_AUTH: neo4j/root12345
+      NEO4J_dbms_logs_debug_level: DEBUG
+      NEO4J_ACCEPT_LICENSE_AGREEMENT: "yes"
+
+
+  redis:
+    image: redis:latest
+    container_name: redis-server
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redis/dаta:/root/redis
+      - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
+    environment:
+      - REDIS_PASSWORD=12345
+      - REDIS_PORT=6379
+      - REDIS_DATABASES=16
+      
+
+  elasticsearch:
+    image: elasticsearch:8.9.2
+    container_name: elastic-server
+    restart: always
+    volumes:
+      - ./elasticsearch/data:/usr/share/elasticsearch/data
+    environment:
+      ES_JAVA_OPTS: "-Xmx512m -Xms512m"
+      ELASTIC_USERNAME: "elasticB"
+      ELASTIC_PASSWORD: "12345"
+      discovery.type: single-node
+    ports:
+      - "9200:9200"
+      - "9300:9300"
