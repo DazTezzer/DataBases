@@ -79,11 +79,13 @@ for student in students[0]:
     FROM visits
     WHERE student_id = %s
     AND "timeTable_id" in (%s)
-    --AND date_visit between '%s' AND '%s'
+    AND date_visit between '%s' AND '%s'
     GROUP BY student_id
     '''
     cursor.execute(querry_pattern % (str(student['student_id']), ','.join(map(str, student['collect(distinct tt.iid)'])), str(begin_date),str(end_date)))
-    result.append(cursor.fetchall())
+    statistic = cursor.fetchall()
+    if statistic != []:
+        result.append(statistic)
 print(result)
 sorted_array = sorted(result, key=lambda x: x[0][0])
 for res in result:
