@@ -45,11 +45,12 @@ redis = redis.Redis(
     db=0)
 
 student_limit = 10
-phrase = 'модели'
+phrase = 'данных'
 begin_date = '2023-09-01'
 end_date = '2023-12-28'
 
 query_body = {
+    "size":100,
     "query": {
         "query_string": {
             "query": "*%s*" % (phrase),

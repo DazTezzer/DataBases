@@ -31,7 +31,7 @@ cursor.execute('''CREATE TABLE public.institute
     name character varying(256) COLLATE pg_catalog."default",
     CONSTRAINT institute_pkey PRIMARY KEY (id));''')
 
-institutes_array = ['ИКБиЦТ','ИИТ','ИИИ','ИПТиИП','ИРиИ']
+institutes_array = ['ИКБиЦТ','ИИТ']
 institute_data = []
 for i in range(len(institutes_array)):
     institute_data.append((institutes_array[i]))
@@ -210,7 +210,7 @@ cursor.execute('''CREATE TABLE public.lecture
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 );''')
-kolvo_lectures = 20
+kolvo_lectures = 100
 lecture_data = []
 
 get_array_discip_id = "SELECT array_agg(id) FROM public.disciplines"
@@ -352,7 +352,7 @@ array_timeTable_ids=cursor.fetchall()
 for st in range(len(array_student_ids[0][0])):
     for tt in range(len(array_timeTable_ids[0][0])):
         student_id = array_student_ids[0][0][st]
-        visited = random.choice([True, False])
+        visited = random.choices([True, False], weights=[4, 1])[0]
         timeTable_id = array_timeTable_ids[0][0][tt]
         date_visit = random.choice( [get_random_date_1_23(),get_random_date_2_23(),get_random_date_1_24(),get_random_date_2_24()])
         visits_data.append((student_id,visited,timeTable_id,date_visit))
