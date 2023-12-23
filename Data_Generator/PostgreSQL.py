@@ -142,7 +142,7 @@ cursor.execute('''CREATE TABLE public.students
         ON DELETE NO ACTION
 );''')
 
-kolvo_students = 100
+kolvo_students = 200
 def get_stud_code():
     return random.randint(1000000,9999999)
 
@@ -210,7 +210,7 @@ cursor.execute('''CREATE TABLE public.lecture
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 );''')
-kolvo_lectures = 100
+kolvo_lectures = 300
 lecture_data = []
 
 get_array_discip_id = "SELECT array_agg(id) FROM public.disciplines"
@@ -328,7 +328,7 @@ cursor.execute('''CREATE TABLE public.visits
     visited boolean,
     "timeTable_id" integer,
     date_visit date,
-    CONSTRAINT visits_pkey PRIMARY KEY (id),
+    CONSTRAINT visits_pkey PRIMARY KEY (id,date_visit),
     CONSTRAINT visits_student_id_fkey FOREIGN KEY (student_id)
         REFERENCES public.students (id_stud_code) MATCH SIMPLE
         ON UPDATE NO ACTION
@@ -337,7 +337,15 @@ cursor.execute('''CREATE TABLE public.visits
         REFERENCES public."timeTable" (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
-);''')
+)partition by range (date_visit);
+CREATE TABLE public.visits2023_1 PARTITION OF public.visits
+    FOR VALUES FROM ('2023-09-01') TO ('2023-12-29');
+CREATE TABLE public.visits2023_2 PARTITION OF public.visits
+    FOR VALUES FROM ('2023-01-01') TO ('2023-05-31');
+CREATE TABLE public.visits2024_1 PARTITION OF public.visits
+    FOR VALUES FROM ('2024-09-01') TO ('2024-12-29');
+CREATE TABLE public.visits2024_2 PARTITION OF public.visits
+    FOR VALUES FROM ('2024-01-01') TO ('2024-05-31');''')
 
 visits_data = []
 
@@ -352,7 +360,7 @@ array_timeTable_ids=cursor.fetchall()
 for st in range(len(array_student_ids[0][0])):
     for tt in range(len(array_timeTable_ids[0][0])):
         student_id = array_student_ids[0][0][st]
-        visited = random.choices([True, False], weights=[4, 1])[0]
+        visited = random.choices([True, False], weights=[7, 1])[0]
         timeTable_id = array_timeTable_ids[0][0][tt]
         date_visit = random.choice( [get_random_date_1_23(),get_random_date_2_23(),get_random_date_1_24(),get_random_date_2_24()])
         visits_data.append((student_id,visited,timeTable_id,date_visit))

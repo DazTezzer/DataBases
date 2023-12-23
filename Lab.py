@@ -50,7 +50,7 @@ begin_date = '2023-09-01'
 end_date = '2023-12-28'
 
 query_body = {
-    "size":100,
+    "size":300,
     "query": {
         "query_string": {
             "query": "*%s*" % (phrase),
@@ -96,12 +96,13 @@ for res in result:
 headers = ["№", "Студент", "Посещение", "Период", "Искомое слово"]
 table_data = []
 i = 0
-for item in sorted_array:
+for i, item in enumerate(sorted_array):
+    if i >= 10:
+        break
     procent, student_id = item[0]
     student_name = redis.get(student_id).decode()
     progress = f"{int(procent * 100)}%"
     period = f"c {begin_date} по {end_date}"
-    table_data.append([i, student_name, progress, period, phrase])
-    i = i + 1
+    table_data.append([student_id, student_name, progress, period, phrase])
 
 print(tabulate(table_data, headers, tablefmt="grid"))

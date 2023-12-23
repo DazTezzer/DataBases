@@ -22,7 +22,7 @@ except Exception as err:
 
 
 # --------------------------elasticsearch таблица Materials-------------------------
-kolvo_materials = 100
+kolvo_materials = 300
 get_array_lecture_id = "SELECT array_agg(id) FROM public.lecture"
 cursor.execute(get_array_lecture_id)
 array_lecture_ids=cursor.fetchall()
