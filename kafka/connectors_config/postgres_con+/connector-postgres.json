@@ -1,0 +1,16 @@
+{
+  "name": "PostgresConnectorConnector_0",
+  "config": {
+    "name": "PostgresConnectorConnector_0",
+    "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+    "topic.prefix": "university",
+    "database.hostname": "postgres",
+    "database.port": "5432",
+    "database.user": "postgres",
+    "database.password": "12345",
+    "database.dbname": "university",
+    "snapshot.include.collection.list": "true",
+    "snapshot.mode": "initial",
+    "include": "true"
+  }
+}

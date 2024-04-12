@@ -24,7 +24,7 @@ database_name = "university"
 user_name = "postgres"
 password = "12345"
 host_ip = "localhost"
-host_port ="5433"
+host_port ="5432"
 try:
     connection = psycopg2.connect(
         database=database_name,
@@ -78,7 +78,7 @@ except Exception as err:
 es = Elasticsearch("http://elastic:12345@localhost:9200")
 
 try:
-    es.indices.delete(index='materials')
+    es.indices.delete(index='university.public.materials')
     print("ElasticSearch clear")
 except Exception as err:
     print("Error in ES delete",err)

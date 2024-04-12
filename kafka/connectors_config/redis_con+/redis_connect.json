@@ -1,0 +1,23 @@
+{
+  "name": "redis-sink-connector",
+  "config": {
+    "connector.class": "io.lenses.streamreactor.connect.redis.sink.RedisSinkConnector",
+    "tasks.max": "1",
+    "errors.tolerance": "all",
+    "errors.log.enable": "true",
+    "errors.log.include.messages": "true",
+    "topics": "university.public.students",
+    "connect.redis.host": "redis-server",
+    "connect.redis.port": "6379",
+    "connect.redis.ssl.enabled": "false",
+    "connect.redis.kcql": "SELECT fio FROM university.public.students PK id_stud_code",
+    "transforms":"ExtractAfter",
+    "transforms.ExtractAfter.type":"org.apache.kafka.connect.transforms.ExtractField$Value",
+    "transforms.ExtractAfter.field":"after",
+    "redis.connection": "localhost:6379",
+    "redis.mode": "single",
+    "redis.password": "12345",
+    "redis.key.mapper.class": "com.landoop.streamreactor.connect.redis.sink.config.key.StringPlainKeyBuilder",
+    "redis.value.mapper.class": "com.landoop.streamreactor.connect.redis.sink.config.value.StringValueBuilder"
+  }
+}

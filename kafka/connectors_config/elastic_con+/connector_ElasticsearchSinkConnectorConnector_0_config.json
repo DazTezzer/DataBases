@@ -1,0 +1,15 @@
+{
+  "name": "ElasticsearchSinkConnectorConnector_0",
+  "config": {
+    "connector.class": "io.confluent.connect.elasticsearch.ElasticsearchSinkConnector",
+    "tasks.max": "1",
+    "errors.retry.timeout": "-1",
+    "errors.retry.delay.max.ms": "1000",
+    "errors.tolerance": "all",
+    "errors.log.enable": "true",
+    "errors.log.include.messages": "true",
+    "topics": "university.public.materials, university.public.students, university.public.kafedra, university.public.disciplines, university.public.group, university.public.lecture, university.public.specialnost, university.public.timetable, university.public.institute",
+    "connection.url": "http://elasticsearch:9200/",
+    "key.ignore": "true"
+  }
+}

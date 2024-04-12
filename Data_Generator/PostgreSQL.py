@@ -4,12 +4,13 @@ from faker import Faker
 from datetime import datetime as DT
 from datetime import timedelta
 from random import randrange
+import time
 
 database_name = "university"
 user_name = "postgres"
 password = "12345"
 host_ip = "localhost"
-host_port ="5433"
+host_port ="5432"
 try:
     connection = psycopg2.connect(
         database=database_name,
@@ -39,7 +40,7 @@ institute_values = ", ".join(["(%s)"] * len(institute_data))
 
 query_institute = (f"INSERT INTO public.institute (name) VALUES {institute_values}")
 cursor.execute(query_institute, institute_data)
-
+time.sleep(10)
 #-------------------------------------------таблица Кафедра-----------------------------------------------
 
 cursor.execute('''CREATE TABLE public.kafedra  
@@ -66,7 +67,7 @@ for i in range(len(cafedras_array)):
 kafedra_values = ", ".join(["%s"] * len(kafedra_data))
 insert_query = (f"INSERT INTO public.kafedra (name,institute_id) VALUES {kafedra_values}")
 cursor.execute(insert_query, kafedra_data)
-
+time.sleep(10)
 #-------------------------------------------таблица Специальность-----------------------------------------------
 
 cursor.execute('''CREATE TABLE public.specialnost  
@@ -94,7 +95,7 @@ for i in range(len(specialnosts_array)):
 specialnosts_values = ", ".join(["%s"] * len(specialnosts_data))
 insert_query = (f"INSERT INTO public.specialnost (name,kafedra_id) VALUES {specialnosts_values}")
 cursor.execute(insert_query, specialnosts_data)
-
+time.sleep(10)
 
 
 #-------------------------------------------таблица Группа-----------------------------------------------
@@ -127,7 +128,7 @@ group_values = ", ".join(["%s"] * len(group_data))
 
 query_group = (f"INSERT INTO public.group (name,kurs,spec_id) VALUES {group_values}")
 cursor.execute(query_group, group_data)
-
+time.sleep(10)
 #-------------------------------------------таблица Студенты-----------------------------------------------
 
 cursor.execute('''CREATE TABLE public.students
@@ -164,7 +165,7 @@ for _ in range(kolvo_students):
 studens_values = ", ".join(["%s"] * len(students_data))
 insert_query = (f"INSERT INTO students (id_stud_code,fio,group_id) VALUES {studens_values}")
 cursor.execute(insert_query, students_data)
-
+time.sleep(10)
 #-------------------------------------------таблица Дисциплины-----------------------------------------------
 
 cursor.execute('''CREATE TABLE public.disciplines
@@ -196,7 +197,7 @@ disciplines_values = ", ".join(["%s"] * len(disciplines_data))
 
 query_disciplines = (f"INSERT INTO public.disciplines (name,spec_id,check_type,description,tag,technical) VALUES {disciplines_values}")
 cursor.execute(query_disciplines, disciplines_data)
-
+time.sleep(10)
 #-------------------------------------------таблица Лекции-----------------------------------------------
 
 cursor.execute('''CREATE TABLE public.lecture
@@ -227,7 +228,7 @@ for _ in range(kolvo_lectures):
 lecture_values = ", ".join(["%s"] * len(lecture_data))
 insert_query = (f"INSERT INTO public.lecture (name,discip_id) VALUES {lecture_values}")
 cursor.execute(insert_query, lecture_data)
-
+time.sleep(10)
 #-------------------------------------------таблица Расписания-----------------------------------------------
 
 cursor.execute('''CREATE TABLE public.\"timeTable\"  
@@ -261,7 +262,7 @@ array_group_ids=cursor.fetchall()
 get_array_lecture_id = "SELECT array_agg(id) FROM public.lecture"
 cursor.execute(get_array_lecture_id)
 array_lecture_ids=cursor.fetchall()
-
+time.sleep(10)
 # 1 семестр 23 год
 def get_random_date_1_23():
     start = DT.strptime('01.09.2023', '%d.%m.%Y')
@@ -306,14 +307,14 @@ def get_random_date_2_24():
 for lec in range(len(array_lecture_ids[0][0])):
     week = random.randint(1,16)
     date = random.choice( [get_random_date_1_23(),get_random_date_2_23(),get_random_date_1_24(),get_random_date_2_24()])
-    time = random.choice(['9:00','10:40','12:40','14:20','16:20','18:00'])
+    randomtime = random.choice(['9:00','10:40','12:40','14:20','16:20','18:00'])
     teacher_fio = fake.name()
     id = random.randint(0,len(array_group_ids[0][0])-1)
     group_id = array_group_ids[0][0][id]
     lecture_id = array_lecture_ids[0][0][lec]
     number_classroom = random.randint(100,400)
     
-    timeTable_data.append((week,date,time,teacher_fio, group_id,lecture_id,number_classroom))
+    timeTable_data.append((week,date,randomtime,teacher_fio, group_id,lecture_id,number_classroom))
 
 timeTable_values = ", ".join(["%s"] * len(timeTable_data))
 insert_query = (f"INSERT INTO public.\"timeTable\" (week,date,time,teacher_fio, group_id,lecture_id,number_classroom) VALUES {timeTable_values}")
@@ -368,5 +369,4 @@ for st in range(len(array_student_ids[0][0])):
 visits_values = ", ".join(["%s"] * len(visits_data))
 insert_query = (f"INSERT INTO public.visits (student_id,visited,\"timeTable_id\",date_visit) VALUES {visits_values}")
 cursor.execute(insert_query, visits_data)
-
 print("Postrges Данные добавлены")

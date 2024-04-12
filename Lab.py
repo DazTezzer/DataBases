@@ -23,7 +23,7 @@ database_name = "university"
 user_name = "postgres"
 password = "12345"
 host_ip = "localhost"
-host_port = "5433"
+host_port = "5432"
 try:
     connection = psycopg2.connect(
         database=database_name,
